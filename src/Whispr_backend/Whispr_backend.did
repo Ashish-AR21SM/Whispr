@@ -1,0 +1,203 @@
+type ReportStatus = variant {
+  Pending;
+  UnderReview;
+  Approved;
+  Rejected;
+};
+
+type Location = record {
+  address: opt text;
+  latitude: float64;
+  longitude: float64;
+};
+
+type Report = record {
+  id: nat64;
+  title: text;
+  description: text;
+  category: text;
+  date_submitted: nat64;
+  incident_date: opt text;
+  location: opt Location;
+  submitter_id: principal;
+  evidence_count: nat32;
+  evidence_files: vec nat64;
+  stake_amount: nat64;
+  reward_amount: nat64;
+  status: ReportStatus;
+  reviewer: opt principal;
+  review_date: opt nat64;
+  review_notes: opt text;
+  ipfs_cid: opt text;
+  ipfs_pinned_at: opt nat64;
+};
+
+type MessageSender = variant {
+  Authority: principal;
+  Reporter: principal;
+  System;
+};
+
+type Message = record {
+  id: nat64;
+  report_id: nat64;
+  sender: MessageSender;
+  content: text;
+  timestamp: nat64;
+  attachment: opt blob;
+};
+
+type User = record {
+  id: principal;
+  token_balance: nat64;
+  reports_submitted: vec nat64;
+  rewards_earned: nat64;
+  stakes_active: nat64;
+  stakes_lost: nat64;
+};
+
+type Authority = record {
+  id: principal;
+  reports_reviewed: vec nat64;
+  approval_rate: float64;
+};
+
+type AuthorityStats = record {
+  reports_pending: nat64;
+  reports_verified: nat64;
+  reports_rejected: nat64;
+  total_rewards_distributed: nat64;
+};
+
+type EvidenceFile = record {
+  id: nat64;
+  name: text;
+  file_type: text;
+  data: blob;
+  upload_date: nat64;
+  ipfs_cid: opt text;
+};
+
+type DetailedAnalytics = record {
+  total_reports: nat64;
+  pending_reports: nat64;
+  approved_reports: nat64;
+  rejected_reports: nat64;
+  category_breakdown: vec record { text; record { nat64; nat64; nat64 } };
+  monthly_submission_trend: vec record { nat64; nat64 };
+  average_stake_amount: float64;
+  total_staked_amount: nat64;
+  total_rewards_distributed: nat64;
+};
+
+type SystemHealth = record {
+  status: text;
+  total_reports: nat64;
+  pending_reports: nat64;
+  system_time: nat64;
+  memory_usage: nat64;
+};
+
+type Result = variant {
+  Ok: nat64;
+  Err: text;
+};
+
+type Result_1 = variant {
+  Ok: vec Report;
+  Err: text;
+};
+
+type Result_2 = variant {
+  Ok;
+  Err: text;
+};
+
+type Result_3 = variant {
+  Ok: AuthorityStats;
+  Err: text;
+};
+
+type Result_4 = variant {
+  Ok: vec nat64;
+  Err: text;
+};
+
+type Result_5 = variant {
+  Ok: DetailedAnalytics;
+  Err: text;
+};
+
+type Result_6 = variant {
+  Ok: record { vec Report; nat64 };
+  Err: text;
+};
+
+type Result_7 = variant {
+  Ok: vec Authority;
+  Err: text;
+};
+
+type Result_8 = variant {
+  Ok: text;
+  Err: text;
+};
+
+service : {
+  // Report management
+  submit_report: (text, text, text, opt Location, opt text, nat64, nat32) -> (Result);
+  get_all_reports: () -> (Result_1) query;
+  get_reports_by_status: (ReportStatus) -> (Result_1) query;
+  get_report: (nat64) -> (vec Report) query;
+  get_user_reports: () -> (vec Report) query;
+  get_reports_paginated: (nat64, nat64) -> (Result_6) query;
+  get_reports_by_category: (text) -> (Result_1) query;
+  get_reports_by_date_range: (nat64, nat64) -> (Result_1) query;
+  
+  // Report review (Authority only)
+  verify_report: (nat64, opt text) -> (Result_2);
+  reject_report: (nat64, opt text) -> (Result_2);
+  put_under_review: (nat64, opt text) -> (Result_2);
+  bulk_verify_reports: (vec nat64, opt text) -> (Result_4);
+  
+  // Search functionality
+  search_reports: (opt text, opt text, opt ReportStatus, opt nat64, opt nat64, opt nat64, opt nat64) -> (Result_1) query;
+  
+  // Messaging
+  send_message_as_authority: (nat64, text) -> (Result_2);
+  send_message_as_reporter: (nat64, text) -> (Result_2);
+  get_messages: (nat64) -> (vec Message) query;
+  
+  // Evidence management
+  upload_evidence: (nat64, text, text, blob) -> (Result);
+  get_evidence: (nat64) -> (opt EvidenceFile) query;
+  get_report_evidence: (nat64) -> (vec EvidenceFile) query;
+  
+  // IPFS data retrieval
+  retrieve_report_from_ipfs: (text) -> (Result_8);
+  retrieve_evidence_from_ipfs: (text) -> (Result_8);
+  
+  // User management
+  get_user_balance: () -> (nat64) query;
+  get_user_info: () -> (opt User) query;
+  transfer_tokens: (principal, nat64) -> (Result_2);
+  add_tokens_to_user: (principal, nat64) -> (Result_2);
+  configure_ipfs_credentials: (text, text, text) -> (Result_2);
+  
+  // Authority management
+  is_authority: () -> (bool) query;
+  register_as_authority: () -> (Result_8);
+  add_new_authority: (principal) -> (Result_2);
+  remove_authority: (principal) -> (Result_2);
+  get_all_authorities: () -> (Result_7) query;
+  cleanup_unauthorized_authorities: () -> (Result);
+  
+  // Statistics and analytics
+  get_authority_statistics: () -> (Result_3) query;
+  get_detailed_analytics: () -> (Result_5) query;
+  health_check: () -> (SystemHealth) query;
+  
+  // Development utilities
+  reset_to_mock_data: () -> (Result_2);
+  initialize_system: () -> (Result_2);
+}

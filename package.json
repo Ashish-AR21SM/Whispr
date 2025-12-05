@@ -1,0 +1,41 @@
+{
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "name": "Whispr",
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "prebuild": "npm run prebuild --workspaces --if-present",
+    "pretest": "npm run prebuild --workspaces --if-present",
+    "start": "npm start --workspaces --if-present",
+    "test": "npm test --workspaces --if-present"
+  },
+  "type": "module",
+  "workspaces": [
+    "src/Whispr_frontend"
+  ],
+  "dependencies": {
+    "@dfinity/agent": "^2.4.1",
+    "@dfinity/candid": "^2.4.1",
+    "@dfinity/principal": "^2.4.1",
+    "@headlessui/react": "^2.2.2",
+    "@nfid/identitykit": "^1.0.13",
+    "@react-spring/web": "^9.7.5",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^8.18.0",
+    "axios": "^1.9.0",
+    "classnames": "^2.5.1",
+    "framer-motion": "^12.9.2",
+    "lucide": "^0.503.0",
+    "lucide-react": "^0.503.0",
+    "maath": "^0.10.8",
+    "react": "^18.3.1",
+    "three": "^0.176.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.5.0",
+    "prettier": "^3.5.3",
+    "vite-plugin-environment": "^1.1.3"
+  }
+}

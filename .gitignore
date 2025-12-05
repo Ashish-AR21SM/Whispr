@@ -1,0 +1,66 @@
+# Various IDEs and Editors
+.vscode/
+.idea/
+**/*~
+*.swp
+*.swo
+
+# Mac OSX temporary files
+.DS_Store
+**/.DS_Store
+
+# dfx temporary files
+.dfx/
+
+# generated files
+**/declarations/
+
+# rust
+target/
+Cargo.lock
+
+# frontend code
+node_modules/
+dist/
+.svelte-kit/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build artifacts
+build/
+*.wasm
+
+# Testing
+coverage/
+.nyc_output/
+
+# OS files
+Thumbs.db
+ehthumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Dependency lock files
+# package-lock.json
+# yarn.lock
+
+
+__tests__/
+tests/
+*.test.js
+*.spec.js

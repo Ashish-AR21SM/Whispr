@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/Whispr_backend"
+]
+resolver = "2"
