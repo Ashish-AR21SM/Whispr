@@ -59,8 +59,3 @@ ehthumbs.db
 # package-lock.json
 # yarn.lock
 
-
-__tests__/
-tests/
-*.test.js
-*.spec.js
