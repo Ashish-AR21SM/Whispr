@@ -29,7 +29,7 @@ The platform generates cryptographic identities that cannot be traced back to us
 
 ### The Problem
 
-In conventional systems, when a citizen submits a report, their identity is stored in a centralized database controlled by authorities. This creates a direct link between the informer and their report, exposing them to potential retaliation from criminal elements.
+In conventional systems, when a citizen submits a report, their identity is stored in a centralized database controlled by authorities. This creates a direct link between the informer and their report, exposing them to potential retaliation from criminal elements..
 
 ### The Solution
 
